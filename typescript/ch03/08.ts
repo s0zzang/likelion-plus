@@ -17,10 +17,10 @@
   console.log(add20(0));
 
   function checkNumber(x: number, y: number) {
-    // let z;
-    if (x === 10) return "x는 10"; // returalValue: "x는 10" | undefined
-    else if (x > y) return `큰 수는 ${x}`; // returalValue: string | undefined
-    else if (x > 5) return 5; // returalValue: string | 5 | undefined
+    if (x === 10) return "x는 10"; // checkNumber 리턴: "x는 10" | undefined
+    else if (x > y)
+      return `큰 수는 ${x}`; // checkNumber 리턴: string | undefined
+    else if (x > 5) return 5; // checkNumber 리턴: string | 5 | undefined
   }
 
   const returalValue = checkNumber(10, 30);
