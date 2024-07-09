@@ -1,20 +1,25 @@
-import Submit from "@components/Submit";
 import Button from "@components/Button";
 import useFetch from "../../hooks/useFetch";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ListItem from "./ListItem";
+import Search from "@components/Search";
 
 const List = () => {
   const { type } = useParams();
+  const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
-  const { data, refetch } = useFetch(`/posts?type=${type}`);
+  const { data, refetch } = useFetch(`/posts?type=${type}&keyword=${keyword}`);
   const list = data?.map((item, idx) => (
     <ListItem item={item} key={idx} idx={idx} type={type} />
   ));
 
   useEffect(() => {
     refetch();
+  }, [type, keyword]);
+
+  useEffect(() => {
+    setKeyword("");
   }, [type]);
 
   return (
@@ -26,19 +31,7 @@ const List = () => {
       </div>
       <div className="flex justify-end mr-4">
         {/* 검색 */}
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            location.href = "";
-          }}
-        >
-          <input
-            className="dark:bg-gray-600 bg-gray-100 p-1 rounded"
-            type="text"
-            name="keyword"
-          />
-          <Submit>검색</Submit>
-        </form>
+        <Search keyword={keyword} setKeyword={setKeyword} />
         <Button onClick={() => navigate(`/${type}/new`)}>글작성</Button>
       </div>
       <section className="pt-10">
