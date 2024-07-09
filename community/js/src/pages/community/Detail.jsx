@@ -1,14 +1,28 @@
 import Button from "@components/Button";
+import useMutation from "@hooks/useMutation";
+
 import useFetch, { API_SERVER } from "@hooks/useFetch";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userState } from "@recoil/atoms";
 import CommentList from "./CommentList";
 
 const Detail = () => {
-  let { _id } = useParams();
+  let { _id, type } = useParams();
   const { data } = useFetch(`/posts/${_id}`);
   const user = useRecoilValue(userState);
+  const navigate = useNavigate();
+  const { send } = useMutation(`/posts/${_id}`, { method: "DELETE" });
+
+  const handleDelete = () => {
+    send({
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token.accessToken}`,
+      },
+    });
+    navigate(`/${type}`);
+  };
 
   return (
     data && (
@@ -37,11 +51,11 @@ const Detail = () => {
               <>
                 <Button
                   bgColor="gray"
-                  onClick={() => (location.href = "/info/1/edit")}
+                  onClick={() => navigate(`/${type}/${_id}/edit`)}
                 >
                   수정
                 </Button>
-                <Button bgColor="red" onClick={() => (location.href = "/info")}>
+                <Button bgColor="red" onClick={handleDelete}>
                   삭제
                 </Button>
               </>
