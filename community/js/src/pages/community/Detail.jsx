@@ -8,10 +8,10 @@ import { userState } from "@recoil/atoms";
 import CommentList from "./CommentList";
 
 const Detail = () => {
-  let { _id, type } = useParams();
-  const { data } = useFetch(`/posts/${_id}`);
-  const user = useRecoilValue(userState);
   const navigate = useNavigate();
+  const { _id, type } = useParams();
+  const user = useRecoilValue(userState);
+  const { data } = useFetch(`/posts/${_id}`);
   const { send } = useMutation(`/posts/${_id}`, { method: "DELETE" });
 
   const handleDelete = () => {
@@ -46,7 +46,7 @@ const Detail = () => {
           </div>
           <hr />
           <div className="flex justify-end my-8">
-            <Button onClick={() => history.back()}>목록</Button>
+            <Button onClick={() => navigate(`/${type}`)}>목록</Button>
             {user._id === data.user._id && (
               <>
                 <Button
