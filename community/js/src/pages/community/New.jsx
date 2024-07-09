@@ -1,7 +1,34 @@
 import Submit from "@components/Submit";
 import Button from "@components/Button";
+import useMutation from "@hooks/useMutation";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userState } from "../../recoil/atoms";
 
 const New = () => {
+  const navigate = useNavigate();
+  const { type } = useParams();
+  const user = useRecoilValue(userState);
+
+  const { send } = useMutation(`/posts`, { method: "POST" });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async ({ title, content }) => {
+    send({
+      body: JSON.stringify({ type, title, content }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token.accessToken}`,
+      },
+    });
+    navigate(-1);
+  };
+
   return (
     <main className="min-w-[320px] p-4">
       <div className="text-center py-4">
@@ -10,12 +37,7 @@ const New = () => {
         </h2>
       </div>
       <section className="mb-8 p-4">
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            history.back();
-          }}
-        >
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-4">
             <label className="block text-lg content-center" htmlFor="title">
               제목
@@ -26,9 +48,11 @@ const New = () => {
               placeholder="제목을 입력하세요."
               className="w-full py-2 px-4 border rounded-md dark:bg-gray-700 border-gray-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
               name="title"
+              {...register("title", { required: "제목을 입력하세요." })}
             />
-            {/* 입력값 검증 에러 출력 */}
-            {/* <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">에러 메세지</p> */}
+            <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">
+              {errors.title?.message}
+            </p>
           </div>
           <div className="my-4">
             <label className="block text-lg content-center" htmlFor="content">
@@ -40,9 +64,17 @@ const New = () => {
               placeholder="내용을 입력하세요."
               className="w-full p-4 text-sm border rounded-lg border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
               name="content"
+              {...register("content", {
+                required: "내용을 입력하세요.",
+                minLength: {
+                  value: 5,
+                  message: "5글자 이상 입력해주세요.",
+                },
+              })}
             ></textarea>
-            {/* 입력값 검증 에러 출력 */}
-            {/* <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">에러 메세지</p> */}
+            <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">
+              {errors.content?.message}
+            </p>
           </div>
           <hr />
           <div className="flex justify-end my-6">
