@@ -14,7 +14,7 @@ export const boradList = [
   {
     title: "희선이네",
     content: "메롱",
-    href: "/h2sun",
+    href: "/post",
   },
 ];
 
