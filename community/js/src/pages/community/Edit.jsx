@@ -8,7 +8,7 @@ import { useRecoilValue } from "recoil";
 import { userState } from "../../recoil/atoms";
 
 const Edit = () => {
-  const { type, _id } = useParams();
+  const { _id } = useParams();
   const navigate = useNavigate();
   const { data, refetch } = useFetch(`/posts/${_id}`);
   const { send } = useMutation(`/posts/${_id}`, { method: "PATCH" });
@@ -28,9 +28,8 @@ const Edit = () => {
         Authorization: `Bearer ${user.token.accessToken}`,
       },
     });
-    // TODO: 수정 완료 후 최신 데이터가 반영되지 않음
     refetch();
-    navigate(`/${type}/${_id}`);
+    navigate(-1);
   };
 
   return (

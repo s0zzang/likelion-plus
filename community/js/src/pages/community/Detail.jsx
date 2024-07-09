@@ -11,8 +11,16 @@ const Detail = () => {
   const navigate = useNavigate();
   const { _id, type } = useParams();
   const user = useRecoilValue(userState);
-  const { data } = useFetch(`/posts/${_id}`);
+  const { data, refetch } = useFetch(`/posts/${_id}`);
   const { send } = useMutation(`/posts/${_id}`, { method: "DELETE" });
+
+  const profile = data?.user.profile
+    ? `${API_SERVER}/${
+        data?.user.profile instanceof Object
+          ? data?.user.profile.path
+          : data?.user.profile
+      }`
+    : "/favicon.png";
 
   const handleDelete = () => {
     send({
@@ -33,8 +41,8 @@ const Detail = () => {
             <div className="flex items-center gap-x-1 ml-auto text-right text-gray-400">
               <img
                 className="w-5 aspect-square object-cover rounded-full"
-                src={`${API_SERVER}/${data.user.profile}`}
-                alt=""
+                src={profile}
+                alt={data.user?.name}
               />
               <p>{data.user.name}</p>
             </div>
@@ -64,7 +72,7 @@ const Detail = () => {
         </section>
 
         {/* 댓글 목록 */}
-        <CommentList _id={_id} />
+        <CommentList _id={_id} refetch={refetch} />
       </main>
     )
   );
