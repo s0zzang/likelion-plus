@@ -1,15 +1,27 @@
 import Button from "@components/Button";
-import { boradList } from "../../pages/community";
+import { boradList } from "@pages/community";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import { userState } from "@recoil/atoms";
+import { API_SERVER } from "@hooks/useFetch";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const user = useRecoilValue(userState);
+  const resetUser = useResetRecoilState(userState);
+  const navigate = useNavigate();
+  const handleLogOut = () => {
+    resetUser();
+    navigate("/");
+  };
+
   return (
     <header className="px-8 min-w-80 bg-slate-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 transition-color duration-500 ease-in-out">
       <nav className="flex flex-wrap justify-center items-center p-4 md:flex-nowrap md:justify-between">
         <div className="w-1/2 order-1 md:w-auto">
-          <a href="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <img className="h-10" src="/favicon.png" alt="로고 이미지" />
             <span className="text-lg font-bold">소정컴</span>
-          </a>
+          </Link>
         </div>
         <div className="w-auto order-2 text-base mt-4 md:mt-0">
           <ul className="flex items-center gap-6 uppercase">
@@ -19,7 +31,7 @@ const Header = () => {
                   key={idx}
                   className="hover:text-amber-500 hover:font-semibold"
                 >
-                  <a href={item.href}>{item.title}</a>
+                  <Link to={item.href}>{item.title}</Link>
                 </li>
               );
             })}
@@ -27,28 +39,37 @@ const Header = () => {
         </div>
 
         <div className="w-1/2 order-1 flex justify-end items-center md:order-2 md:w-auto">
+          {user ? (
+            <p className="flex items-center">
+              <img
+                className="w-8 rounded-full mr-2"
+                src={`${API_SERVER}/${user.profileImage}`}
+              />
+              {user.name}님 :)
+              <Button size="md" bgColor="gray" onClick={handleLogOut}>
+                로그아웃
+              </Button>
+            </p>
+          ) : (
+            <div className="flex justify-end">
+              <Button size="sm" onClick={() => navigate("/user/login")}>
+                로그인
+              </Button>
+              <Button
+                size="sm"
+                bgColor="gray"
+                onClick={() => navigate("/user/signup")}
+              >
+                회원가입
+              </Button>
+            </div>
+          )}
           {/* 로그인 후 */}
           {/*
-            <p className="flex items-center">
-              <img className="w-8 rounded-full mr-2" src="https://api.fesp.shop/files/00-sample/user-muzi.webp" />
-              용쌤님 :)
-              <Button size="md" bgColor="gray" onClick={ () => location.href='/' }>로그아웃</Button>
-            </p>
+            
             */}
 
           {/* 로그인 전 */}
-          <div className="flex justify-end">
-            <Button size="sm" onClick={() => (location.href = "/user/login")}>
-              로그인
-            </Button>
-            <Button
-              size="sm"
-              bgColor="gray"
-              onClick={() => (location.href = "/user/signup")}
-            >
-              회원가입
-            </Button>
-          </div>
 
           {/* 라이트/다크 모드 전환 */}
           <button

@@ -26,7 +26,7 @@ const Community = () => {
     <main className="container mx-auto mt-10 p-4">
       <section className="text-center">
         <img
-          className="rounded-md"
+          className="rounded-md m-auto"
           src="https://i.pinimg.com/564x/5f/70/34/5f70349da6f9c66c51ce9d9f4f8bd853.jpg"
           alt="welcome"
         />
