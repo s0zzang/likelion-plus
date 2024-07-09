@@ -1,4 +1,41 @@
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import useMutation from "@hooks/useMutation";
+import { API_SERVER } from "@hooks/useFetch";
+
 const Signup = () => {
+  const navigate = useNavigate();
+  const { send } = useMutation(`/users`, { method: "POST" });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async ({ email, password, name, profileImage }) => {
+    // 1. 파일 업로드
+    const imgFormData = new FormData();
+    imgFormData.append("attach", profileImage[0]);
+    const fileRes = await fetch(`${API_SERVER}/files`, {
+      method: "POST",
+      body: imgFormData,
+    });
+    const file = await fileRes.json();
+
+    // 2. 업로드된 파일을 포함한 회원가입 데이터 전송
+    await send({
+      body: JSON.stringify({
+        type: "user",
+        email,
+        password,
+        name,
+        profileImage: file.item[0].path,
+      }),
+    });
+    navigate("/");
+  };
+
   return (
     <main className="min-w-80 flex-grow flex items-center justify-center">
       <div className="p-8  border border-gray-200 rounded-lg w-full max-w-md dark:bg-gray-600 dark:border-0">
@@ -8,12 +45,7 @@ const Signup = () => {
           </h2>
         </div>
 
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            history.back();
-          }}
-        >
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label
               className="block text-gray-700 dark:text-gray-200 mb-2"
@@ -27,9 +59,11 @@ const Signup = () => {
               placeholder="이름을 입력하세요"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-orange-400 dark:bg-gray-700"
               name="name"
+              {...register("name", { required: "이름을 입력하세요." })}
             />
-            {/* 입력값 검증 에러 출력 */}
-            {/* <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">에러 메세지</p> */}
+            <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">
+              {errors.name?.message}
+            </p>
           </div>
           <div className="mb-4">
             <label
@@ -44,9 +78,18 @@ const Signup = () => {
               placeholder="이메일을 입력하세요"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-orange-400 dark:bg-gray-700"
               name="email"
+              {...register("email", {
+                required: "이메일을 입력하세요.",
+                pattern: {
+                  value:
+                    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                  message: "이메일 형식에 맞지 않습니다.",
+                },
+              })}
             />
-            {/* 입력값 검증 에러 출력 */}
-            {/* <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">에러 메세지</p> */}
+            <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">
+              {errors.email?.message}
+            </p>
           </div>
           <div className="mb-4">
             <label
@@ -61,9 +104,17 @@ const Signup = () => {
               placeholder="비밀번호를 입력하세요"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-orange-400 dark:bg-gray-700"
               name="password"
+              {...register("password", {
+                required: "비밀번호를 입력하세요.",
+                minLength: {
+                  value: 8,
+                  message: "8자리 이상 입력하세요.",
+                },
+              })}
             />
-            {/* 입력값 검증 에러 출력 */}
-            {/* <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">에러 메세지</p> */}
+            <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">
+              {errors.password?.message}
+            </p>
           </div>
 
           <div className="mb-4">
@@ -80,6 +131,7 @@ const Signup = () => {
               placeholder="이미지를 선택하세요"
               className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700"
               name="profileImage"
+              {...register("profileImage")}
             />
           </div>
 
