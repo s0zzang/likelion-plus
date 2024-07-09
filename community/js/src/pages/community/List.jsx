@@ -10,7 +10,7 @@ const List = () => {
   const navigate = useNavigate();
   const { data, refetch } = useFetch(`/posts?type=${type}`);
   const list = data?.map((item, idx) => (
-    <ListItem item={item} key={idx} idx={idx} />
+    <ListItem item={item} key={idx} idx={idx} type={type} />
   ));
 
   useEffect(() => {

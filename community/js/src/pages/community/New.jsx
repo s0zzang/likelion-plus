@@ -26,7 +26,7 @@ const New = () => {
         Authorization: `Bearer ${user.token.accessToken}`,
       },
     });
-    navigate(-1);
+    navigate(`/${type}`);
   };
 
   return (
