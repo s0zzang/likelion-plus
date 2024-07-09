@@ -1,12 +1,17 @@
 import Submit from "@components/Submit";
 import Button from "@components/Button";
 import useFetch from "../../hooks/useFetch";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import ListItem from "./ListItem";
 
 const List = () => {
   const { type } = useParams();
+  const navigate = useNavigate();
   const { data, refetch } = useFetch(`/posts?type=${type}`);
+  const list = data?.map((item, idx) => (
+    <ListItem item={item} key={idx} idx={idx} />
+  ));
 
   useEffect(() => {
     refetch();
@@ -34,7 +39,7 @@ const List = () => {
           />
           <Submit>검색</Submit>
         </form>
-        <Button onClick={() => (location.href = "/info/new")}>글작성</Button>
+        <Button onClick={() => navigate(`/${type}/new`)}>글작성</Button>
       </div>
       <section className="pt-10">
         <table className="border-collapse w-full table-fixed">
@@ -79,34 +84,7 @@ const List = () => {
 
             {/* 본문 출력 */}
             {data?.length ? (
-              data?.map((item, idx) => {
-                return (
-                  <tr
-                    key={item.createdAt}
-                    className="border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out"
-                  >
-                    <td className="p-2 text-center">{idx + 1}</td>
-                    <td
-                      className="p-2 truncate indent-4 cursor-pointer"
-                      onClick={() => (location.href = `/info/${item._id}`)}
-                    >
-                      {item.title}
-                    </td>
-                    <td className="p-2 text-center truncate">
-                      {item.user.name}
-                    </td>
-                    <td className="p-2 text-center hidden sm:table-cell">
-                      {item.views}
-                    </td>
-                    <td className="p-2 text-center hidden sm:table-cell">
-                      {item.repliesCount}
-                    </td>
-                    <td className="p-2 truncate text-center hidden sm:table-cell">
-                      {item.createdAt}
-                    </td>
-                  </tr>
-                );
-              })
+              list
             ) : (
               <tr>
                 <td colSpan={6} className="p-20 text-center">
