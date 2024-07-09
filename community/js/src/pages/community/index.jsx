@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const boradList = [
   {
     title: "짜장이네",
@@ -7,17 +9,12 @@ export const boradList = [
   {
     title: "바덕이네",
     content: "자유롭게 이야기를 나눠Boa",
-    href: "/baduk",
+    href: "/info",
   },
   {
     title: "희선이네",
     content: "메롱",
     href: "/h2sun",
-  },
-  {
-    title: "우욱이네",
-    content: "궁금한 점을 질문하고 답변을 받아Boa",
-    href: "/woook",
   },
 ];
 
@@ -56,9 +53,12 @@ const Community = () => {
               >
                 <h3 className="text-xl font-bold mb-2">{item.title}</h3>
                 <p className="mb-4">{item.content}</p>
-                <a href={item.href} className="text-orange-500 hover:underline">
+                <Link
+                  to={item.href}
+                  className="text-orange-500 hover:underline"
+                >
                   바로가기
-                </a>
+                </Link>
               </div>
             );
           })}
