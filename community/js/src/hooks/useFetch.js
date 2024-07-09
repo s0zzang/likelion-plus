@@ -20,7 +20,7 @@ const useFetch = (url) => {
     fetchData();
   }, []);
 
-  return { data };
+  return { data, refetch: fetchData };
 };
 
 export default useFetch;

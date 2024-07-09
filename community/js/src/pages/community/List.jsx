@@ -2,10 +2,15 @@ import Submit from "@components/Submit";
 import Button from "@components/Button";
 import useFetch from "../../hooks/useFetch";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const List = () => {
-  let { type } = useParams();
-  const { data } = useFetch(`/posts?type=${type}`);
+  const { type } = useParams();
+  const { data, refetch } = useFetch(`/posts?type=${type}`);
+
+  useEffect(() => {
+    refetch();
+  }, [type]);
 
   return (
     <main className="min-w-80 p-10">
@@ -73,32 +78,42 @@ const List = () => {
         */}
 
             {/* 본문 출력 */}
-            {data?.map((item, idx) => {
-              return (
-                <tr
-                  key={item.createdAt}
-                  className="border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out"
-                >
-                  <td className="p-2 text-center">{idx + 1}</td>
-                  <td
-                    className="p-2 truncate indent-4 cursor-pointer"
-                    onClick={() => (location.href = `/info/${item._id}`)}
+            {data?.length ? (
+              data?.map((item, idx) => {
+                return (
+                  <tr
+                    key={item.createdAt}
+                    className="border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out"
                   >
-                    {item.title}
-                  </td>
-                  <td className="p-2 text-center truncate">{item.user.name}</td>
-                  <td className="p-2 text-center hidden sm:table-cell">
-                    {item.views}
-                  </td>
-                  <td className="p-2 text-center hidden sm:table-cell">
-                    {item.repliesCount}
-                  </td>
-                  <td className="p-2 truncate text-center hidden sm:table-cell">
-                    {item.createdAt}
-                  </td>
-                </tr>
-              );
-            })}
+                    <td className="p-2 text-center">{idx + 1}</td>
+                    <td
+                      className="p-2 truncate indent-4 cursor-pointer"
+                      onClick={() => (location.href = `/info/${item._id}`)}
+                    >
+                      {item.title}
+                    </td>
+                    <td className="p-2 text-center truncate">
+                      {item.user.name}
+                    </td>
+                    <td className="p-2 text-center hidden sm:table-cell">
+                      {item.views}
+                    </td>
+                    <td className="p-2 text-center hidden sm:table-cell">
+                      {item.repliesCount}
+                    </td>
+                    <td className="p-2 truncate text-center hidden sm:table-cell">
+                      {item.createdAt}
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={6} className="p-20 text-center">
+                  게시글이 없습니다.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         <hr />
