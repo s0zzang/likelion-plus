@@ -16,8 +16,8 @@ const Header = () => {
 
   return (
     <header className="px-8 min-w-80 bg-slate-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 transition-color duration-500 ease-in-out">
-      <nav className="flex flex-wrap justify-center items-center p-4 md:flex-nowrap md:justify-between">
-        <div className="w-1/2 order-1 md:w-auto">
+      <nav className="flex flex-wrap justify-center items-center py-4 md:flex-nowrap md:justify-between">
+        <div className="w-1/3 order-1 md:w-auto">
           <Link to="/" className="flex items-center gap-2">
             <img className="h-10" src="/favicon.png" alt="로고 이미지" />
             <span className="text-lg font-bold">소정컴</span>
@@ -38,11 +38,11 @@ const Header = () => {
           </ul>
         </div>
 
-        <div className="w-1/2 order-1 flex justify-end items-center md:order-2 md:w-auto">
+        <div className="w-2/3 order-1 flex justify-end items-center md:order-2 md:w-auto">
           {user ? (
             <p className="flex items-center">
               <img
-                className="w-8 rounded-full mr-2"
+                className="w-8 rounded-full mr-2 aspect-square object-cover"
                 src={`${API_SERVER}/${user.profileImage}`}
               />
               {user.name}님 :)
