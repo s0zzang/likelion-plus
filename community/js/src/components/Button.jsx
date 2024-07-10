@@ -6,8 +6,9 @@ function Button({
   ...rest
 }) {
   let btnColor = {
-    gray: `bg-gray-900`,
-    orange: "bg-orange-500",
+    gray: `bg-gray-300`,
+    black: `bg-gray-900`,
+    orange: "bg-orange-400",
     red: "bg-red-500",
   };
   let btnSize = {
@@ -19,7 +20,7 @@ function Button({
   return (
     <button
       type={type}
-      className={`${btnColor[bgColor]} ${btnSize[size]} text-white font-semibold ml-2 text-base hover:bg-amber-400 rounded`}
+      className={`${btnColor[bgColor]} ${btnSize[size]} text-white font-semibold ml-2 text-base hover:bg-amber-300 rounded`}
       {...rest}
     >
       {children}
