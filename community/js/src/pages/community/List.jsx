@@ -1,5 +1,6 @@
 import Button from "@components/Button";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "@hooks/useFetch";
+import useDebounce from "@hooks/useDebounce";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ListItem from "./ListItem";
@@ -18,14 +19,11 @@ const List = () => {
   const { data, refetch, pagination } = useFetch(
     `/posts?type=${type}&keyword=${keyword}&limit=${limit}&page=${page}`
   );
-
-  const list = data?.map((item, idx) => (
-    <ListItem item={item} key={idx} idx={idx} type={type} />
-  ));
+  const debouncedKeyword = useDebounce(keyword);
 
   useEffect(() => {
     refetch();
-  }, [type, keyword, page]);
+  }, [type, debouncedKeyword, page]);
 
   useEffect(() => {
     setKeyword("");
@@ -90,7 +88,9 @@ const List = () => {
 
             {/* 본문 출력 */}
             {data?.length ? (
-              list
+              data?.map((item, idx) => (
+                <ListItem item={item} key={idx} idx={idx} type={type} />
+              ))
             ) : (
               <tr>
                 <td colSpan={6} className="p-20 text-center">
@@ -106,7 +106,7 @@ const List = () => {
         <Pagination
           type={type}
           setPage={setPage}
-          totalPages={pagination.totalPages}
+          totalPages={pagination?.totalPages}
         />
       </section>
     </main>
