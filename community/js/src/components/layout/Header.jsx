@@ -46,7 +46,7 @@ const Header = () => {
                 src={`${API_SERVER}/${user.profileImage}`}
               />
               {user.name}님 :)
-              <Button size="md" bgColor="gray" onClick={handleLogOut}>
+              <Button size="md" bgColor="black" onClick={handleLogOut}>
                 로그아웃
               </Button>
             </p>
