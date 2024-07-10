@@ -55,7 +55,6 @@ const List = () => {
             <col className="w-[60%] sm:w-[30%]" />
             <col className="w-[30%] sm:w-[15%]" />
             <col className="w-0 sm:w-[10%]" />
-            <col className="w-0 sm:w-[10%]" />
             <col className="w-0 sm:w-[25%]" />
           </colgroup>
           <thead>
@@ -65,9 +64,6 @@ const List = () => {
               <th className="p-2 whitespace-nowrap font-semibold">글쓴이</th>
               <th className="p-2 whitespace-nowrap font-semibold hidden sm:table-cell">
                 조회수
-              </th>
-              <th className="p-2 whitespace-nowrap font-semibold hidden sm:table-cell">
-                댓글수
               </th>
               <th className="p-2 whitespace-nowrap font-semibold hidden sm:table-cell">
                 작성일
