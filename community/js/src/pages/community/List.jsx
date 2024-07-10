@@ -4,23 +4,36 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ListItem from "./ListItem";
 import Search from "@components/Search";
+import Pagination from "@components/Pagination";
+import { useSearchParams } from "react-router-dom";
 
 const List = () => {
   const { type } = useParams();
   const [keyword, setKeyword] = useState("");
+  const limit = 10;
+  const [searchParams] = useSearchParams();
+
   const navigate = useNavigate();
-  const { data, refetch } = useFetch(`/posts?type=${type}&keyword=${keyword}`);
+  const [page, setPage] = useState(searchParams.get("page"));
+  const { data, refetch, pagination } = useFetch(
+    `/posts?type=${type}&keyword=${keyword}&limit=${limit}&page=${page}`
+  );
+
   const list = data?.map((item, idx) => (
     <ListItem item={item} key={idx} idx={idx} type={type} />
   ));
 
   useEffect(() => {
     refetch();
-  }, [type, keyword]);
+  }, [type, keyword, page]);
 
   useEffect(() => {
     setKeyword("");
   }, [type]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [keyword]);
 
   return (
     <main className="min-w-80 p-10">
@@ -90,16 +103,11 @@ const List = () => {
         <hr />
 
         {/* 페이지네이션 */}
-        <div>
-          <ul className="flex justify-center gap-3 m-4">
-            <li className="text-bold text-blue-700">
-              <a href="/info?page=1">1</a>
-            </li>
-            <li>
-              <a href="/info?page=2">2</a>
-            </li>
-          </ul>
-        </div>
+        <Pagination
+          type={type}
+          setPage={setPage}
+          totalPages={pagination.totalPages}
+        />
       </section>
     </main>
   );
