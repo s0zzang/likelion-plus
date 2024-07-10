@@ -9,13 +9,12 @@ import Pagination from "@components/Pagination";
 import { useSearchParams } from "react-router-dom";
 
 const List = () => {
-  const { type } = useParams();
-  const [keyword, setKeyword] = useState("");
   const limit = 10;
-  const [searchParams] = useSearchParams();
-
+  const { type } = useParams();
   const navigate = useNavigate();
-  const [page, setPage] = useState(searchParams.get("page"));
+  const [keyword, setKeyword] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page") || 1;
   const { data, refetch, pagination } = useFetch(
     `/posts?type=${type}&keyword=${keyword}&limit=${limit}&page=${page}`
   );
@@ -30,18 +29,22 @@ const List = () => {
   }, [type]);
 
   useEffect(() => {
-    setPage(1);
-  }, [keyword]);
+    searchParams.set("page", 1);
+    setSearchParams(searchParams);
+  }, [debouncedKeyword, type]);
 
   return (
     <main className="min-w-80 p-10">
       <div className="text-center py-4">
         <h2 className="pb-4 text-2xl font-bold text-gray-700 dark:text-gray-200">
-          정보 공유
+          {type === "sozzang"
+            ? "짜장이네"
+            : type === "info"
+            ? "바덕이네"
+            : "희선이네"}
         </h2>
       </div>
       <div className="flex justify-end mr-4">
-        {/* 검색 */}
         <Search keyword={keyword} setKeyword={setKeyword} />
         <Button onClick={() => navigate(`/${type}/new`)}>글작성</Button>
       </div>
@@ -105,7 +108,7 @@ const List = () => {
         {/* 페이지네이션 */}
         <Pagination
           type={type}
-          setPage={setPage}
+          page={page}
           totalPages={pagination?.totalPages}
         />
       </section>
