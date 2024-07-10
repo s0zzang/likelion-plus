@@ -3,9 +3,10 @@ import { boradList } from "@pages/community";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { userState } from "@recoil/atoms";
 import { API_SERVER } from "@hooks/useFetch";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Header = () => {
+  const { type } = useParams();
   const user = useRecoilValue(userState);
   const resetUser = useResetRecoilState(userState);
   const navigate = useNavigate();
@@ -31,7 +32,16 @@ const Header = () => {
                   key={idx}
                   className="hover:text-amber-500 hover:font-semibold"
                 >
-                  <Link to={item.href}>{item.title}</Link>
+                  <Link
+                    className={`${
+                      item.href === `/${type}`
+                        ? "text-orange-400 font-semibold"
+                        : ""
+                    }`}
+                    to={item.href}
+                  >
+                    {item.title}
+                  </Link>
                 </li>
               );
             })}
