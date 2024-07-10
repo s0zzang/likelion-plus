@@ -55,7 +55,7 @@ const Detail = () => {
           <hr />
           <div className="flex justify-end my-8">
             <Button onClick={() => navigate(`/${type}`)}>목록</Button>
-            {user._id === data.user._id && (
+            {user && user._id === data.user._id && (
               <>
                 <Button
                   bgColor="gray"
