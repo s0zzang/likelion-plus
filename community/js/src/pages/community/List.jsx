@@ -31,7 +31,7 @@ const List = () => {
   useEffect(() => {
     searchParams.set("page", 1);
     setSearchParams(searchParams);
-  }, [debouncedKeyword, type]);
+  }, [debouncedKeyword]);
 
   return (
     <main className="min-w-80 p-10">
