@@ -64,7 +64,9 @@ const CommentItem = ({ item, refetch }) => {
           <textarea
             name="content"
             id="content"
-            className="w-full rounded border-slate-400 border border-solid p-1 "
+            rows="3"
+            cols="40"
+            className="block p-2 w-full text-sm border rounded-lg border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             defaultValue={item.content}
             ref={textareaRef}
           ></textarea>
