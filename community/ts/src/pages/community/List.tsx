@@ -38,7 +38,6 @@ const List = () => {
   return (
     <main className="min-w-80 p-10">
       <div className="text-center py-4">
-        어디에다 숨겼게여~~
         <h2 className="pb-4 text-2xl font-bold text-gray-700 dark:text-gray-200">
           {type === "sozzang"
             ? "짜장이네"
