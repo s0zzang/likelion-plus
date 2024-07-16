@@ -102,11 +102,7 @@ const List = () => {
         <hr />
 
         {/* 페이지네이션 */}
-        <Pagination
-          type={type}
-          page={page}
-          totalPages={pagination?.totalPages}
-        />
+        <Pagination type={type} totalPages={pagination?.totalPages} />
       </section>
     </main>
   );
