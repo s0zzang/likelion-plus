@@ -17,7 +17,13 @@ const Login = () => {
   } = useForm();
   const onSubmit = async ({ email, password }) => {
     const data = await send({ body: JSON.stringify({ email, password }) });
-    setUserState(data.item);
+    setUserState({
+      _id: data.item._id,
+      name: data.item.name,
+      profile: data.item.profileImgae,
+      accessToken: data.item.token.accessToken,
+      refreshToken: data.item.token.refreshToken,
+    });
     navigate(-1);
   };
 
