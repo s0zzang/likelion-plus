@@ -11,3 +11,8 @@ export const userState = atom({
   default: null,
   effects_UNSTABLE: [persistAtom],
 });
+
+export const themeState = atom({
+  key: "themeState",
+  default: window.matchMedia("(prefers-color-scheme: dark)").matches,
+});
