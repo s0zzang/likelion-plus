@@ -1,0 +1,27 @@
+{
+  "name": "board",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/bin/www.js",
+    "dev": "nodemon --exec node --no-warnings --loader ts-node/esm ./bin/www.ts",
+    "build": "tsc -p ."
+  },
+  "dependencies": {
+    "@types/debug": "^4.1.12",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "mongodb": "^6.8.0",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.14.11"
+  }
+}
