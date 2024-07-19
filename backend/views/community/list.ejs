@@ -198,7 +198,7 @@
                     <a
                       href="/<%=item.type %>/<%=item._id %>"
                       class="cursor-pointer"
-                      ><%=item.title %>.</a
+                      ><%=item.title %></a
                     >
                   </td>
                   <td class="p-2 text-center truncate">
@@ -208,7 +208,7 @@
                     <%=item.views %>
                   </td>
                   <td class="p-2 text-center hidden sm:table-cell">
-                    <%=item.repliesCount %>
+                    <%=item.replies?.length || 0 %>
                   </td>
                   <td class="p-2 truncate text-center hidden sm:table-cell">
                     <%=item.updatedAt %>

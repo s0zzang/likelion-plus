@@ -1,7 +1,4 @@
-/* ---------------------------------------------------------------- */
-/*                               DB 관련                              */
-/* ---------------------------------------------------------------- */
-
+import moment from "moment";
 import { Collection, Db, MongoClient } from "mongodb";
 
 // 📍 점 찍고 사용할 속성만 타입 정의해도 됨
@@ -17,6 +14,12 @@ interface Post {
   title: string;
   views: number;
   repliesCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+interface PostComment {
+  _id: number;
+  content: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -59,7 +62,11 @@ const model = {
       return data;
     },
     async detail(_id: number) {
-      const data = await db.post.findOne({ _id });
+      const data = await db.post.findOneAndUpdate(
+        { _id },
+        { $inc: { views: 1 } },
+        { returnDocument: "after" }
+      );
       return data;
     },
     async delete(_id: number) {
@@ -71,7 +78,30 @@ const model = {
       return data;
     },
     async add(post: Post) {
+      post.createdAt = post.updatedAt = moment().format("YYYY.MM.DD HH:mm:ss");
+      post.views = 1;
+      const seq = await db.seq.findOneAndUpdate(
+        { _id: "post" },
+        { $inc: { no: 1 } }
+      );
+      post._id = seq!.no;
       const data = await db.post.insertOne(post);
+      return data;
+    },
+
+    async addComment(_id: number, comment: PostComment) {
+      comment.createdAt = comment.updatedAt = moment().format(
+        "YYYY.MM.DD HH:mm:ss"
+      );
+      const seq = await db.seq.findOneAndUpdate(
+        { _id: "reply" },
+        { $inc: { no: 1 } }
+      );
+      comment._id = seq!.no;
+      const data = await db.post.updateOne(
+        { _id },
+        { $push: { replies: comment } }
+      );
       return data;
     },
   },
