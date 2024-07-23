@@ -1,3 +1,5 @@
+import Anchor from "@/components/Anchor";
+import Button from "@/components/Button";
 import { Metadata } from "next";
 import Link from "next/link";
 
@@ -64,18 +66,10 @@ const Page = () => {
             </Link>
           </div>
           <div className="mt-10 flex justify-center items-center">
-            <button
-              type="submit"
-              className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-            >
-              로그인
-            </button>
-            <Link
-              href="/user/signup"
-              className="ml-8 text-gray-800 hover:underline"
-            >
+            <Button type="submit">로그인</Button>
+            <Anchor href="/signup" color="black">
               회원가입
-            </Link>
+            </Anchor>
           </div>
         </form>
       </div>

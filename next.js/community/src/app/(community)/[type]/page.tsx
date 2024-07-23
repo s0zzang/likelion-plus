@@ -1,15 +1,25 @@
 import Link from "next/link";
 import { Metadata } from "next";
+import Pagination from "@/components/Pagination";
+import Search from "@/components/Search";
+import Anchor from "@/components/Anchor";
 
 export function generateMetadata({
   params: { type },
 }: {
   params: { type: string };
 }): Metadata {
+  const boardTitle =
+    type === "info"
+      ? "정보 공유"
+      : type === "free"
+      ? "자유 게시판"
+      : "질문 게시판";
+
   return {
-    title: `정보공유 - 소짱컴`,
+    title: `${boardTitle} - 소짱컴`,
     openGraph: {
-      title: `정보공유 게시판`,
+      title: `${boardTitle} 게시판`,
       description: `유용한 정보를 나누고 공유하세요.`,
       url: `https://community.fesp.shop/${type}`,
     },
@@ -21,34 +31,24 @@ const Page = ({
 }: {
   params: { type: string; id: string };
 }) => {
+  const boardTitle =
+    type === "info"
+      ? "정보 공유"
+      : type === "free"
+      ? "자유 게시판"
+      : "질문 게시판";
   return (
     <main className="min-w-80 p-10">
       <div className="text-center py-4">
         <h2 className="pb-4 text-2xl font-bold text-gray-700 dark:text-gray-200">
-          정보 공유
+          {boardTitle}
         </h2>
       </div>
       <div className="flex justify-end mr-4">
-        <form action="#">
-          <input
-            className="dark:bg-gray-600 bg-gray-100 p-1 rounded"
-            type="text"
-            name="keyword"
-          />
-          <button
-            type="submit"
-            className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-          >
-            검색
-          </button>
-        </form>
-
-        <Link
-          href={`/${type}/new`}
-          className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-        >
+        <Search />
+        <Anchor href={`/${type}/new`} color="black">
           글작성
-        </Link>
+        </Anchor>
       </div>
       <section className="pt-10">
         <table className="border-collapse w-full table-fixed">
@@ -109,16 +109,7 @@ const Page = ({
         </table>
         <hr />
 
-        <div>
-          <ul className="flex justify-center gap-3 m-4">
-            <li className="font-bold text-blue-700">
-              <Link href="/info?page=1">1</Link>
-            </li>
-            <li>
-              <Link href="/info?page=2">2</Link>
-            </li>
-          </ul>
-        </div>
+        <Pagination />
       </section>
     </main>
   );
