@@ -1,18 +1,20 @@
-import Link from "next/link";
+"use client";
 
-const Pagination = () => {
+import Link from "next/link";
+import { useParams } from "next/navigation";
+
+export default function Pagination() {
+  const params = useParams();
   return (
     <div>
       <ul className="flex justify-center gap-3 m-4">
         <li className="font-bold text-blue-700">
-          <Link href="/info?page=1">1</Link>
+          <Link href={`/${params.type}?page=1`}>1</Link>
         </li>
         <li>
-          <Link href="/info?page=2">2</Link>
+          <Link href={`/${params.type}?page=2`}>2</Link>
         </li>
       </ul>
     </div>
   );
-};
-
-export default Pagination;
+}
