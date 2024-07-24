@@ -1,8 +1,10 @@
-import Link from "next/link";
 import { Metadata } from "next";
 import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import Anchor from "@/components/Anchor";
+import { fetchPosts } from "@/data/fetch/postFetch";
+import ListItem from "./ListItem";
+import model from "@/data/fetch/model";
 
 export function generateMetadata({
   params: { type },
@@ -26,11 +28,17 @@ export function generateMetadata({
   };
 }
 
-const Page = ({
+const Page = async ({
   params: { type, id },
 }: {
   params: { type: string; id: string };
 }) => {
+  // 📍 API 서버 호출
+  // const data = await fetchPosts(type);
+  // 📍 직접 구현
+  const data = await model.post.list(type);
+  const list = data.map((item) => <ListItem key={item._id} item={item} />);
+
   const boardTitle =
     type === "info"
       ? "정보 공유"
@@ -76,36 +84,7 @@ const Page = ({
               </th>
             </tr>
           </thead>
-          <tbody>
-            <tr className="border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out">
-              <td className="p-2 text-center">2</td>
-              <td className="p-2 truncate indent-4">
-                <Link href={`/${type}/${1}`} className="cursor-pointer">
-                  안녕하세요.
-                </Link>
-              </td>
-              <td className="p-2 text-center truncate">용쌤</td>
-              <td className="p-2 text-center hidden sm:table-cell">29</td>
-              <td className="p-2 text-center hidden sm:table-cell">2</td>
-              <td className="p-2 truncate text-center hidden sm:table-cell">
-                2024.07.05 13:39:23
-              </td>
-            </tr>
-            <tr className="border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out">
-              <td className="p-2 text-center">1</td>
-              <td className="p-2 truncate indent-4">
-                <Link href={`/${type}/${2}`} className="cursor-pointer">
-                  좋은 소식이 있습니다.
-                </Link>
-              </td>
-              <td className="p-2 text-center truncate">제이지</td>
-              <td className="p-2 text-center hidden sm:table-cell">22</td>
-              <td className="p-2 text-center hidden sm:table-cell">5</td>
-              <td className="p-2 truncate text-center hidden sm:table-cell">
-                2024.07.03 17:59:13
-              </td>
-            </tr>
-          </tbody>
+          <tbody>{list}</tbody>
         </table>
         <hr />
 
