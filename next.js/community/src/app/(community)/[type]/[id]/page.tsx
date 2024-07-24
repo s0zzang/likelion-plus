@@ -20,6 +20,13 @@ export function generateMetadata({
   };
 }
 
+export async function generateStaticParams() {
+  return [
+    { type: "notice", id: "4" },
+    { type: "notice", id: "5" },
+  ];
+}
+
 const Page = ({
   params: { type, id },
 }: {
