@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Pagination from "@/components/Pagination";
 import Search from "@/components/Search";
 import Anchor from "@/components/Anchor";
-import { fetchPosts } from "@/data/fetch/postFetch";
+// import { fetchPosts } from "@/data/fetch/postFetch";
 import ListItem from "./ListItem";
 import model from "@/data/fetch/model";
 

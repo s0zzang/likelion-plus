@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import CommentList from "./CommentList";
+import model from "@/data/fetch/model";
+import { fetchPost } from "@/data/fetch/fetchPosts";
 
 export function generateMetadata({
   params: { type, id },
@@ -27,27 +29,29 @@ export async function generateStaticParams() {
   ];
 }
 
-const Page = ({
+const Page = async ({
   params: { type, id },
 }: {
   params: { type: string; id: string };
 }) => {
+  // 📍 API 서버 호출
+  const data = await fetchPost(id);
+
+  // 📍 직접 구현
+  // const data = await model.post.detail(+id);
+
   return (
     <main className="container mx-auto mt-4 px-4">
       <section className="mb-8 p-4">
         <form action={`/${type}`}>
-          <div className="font-semibold text-xl">
-            제목 : 좋은 소식이 있습니다.
+          <div className="font-semibold text-xl">제목 : {data?.title}</div>
+          <div className="text-right text-gray-400">
+            작성자 : {data?.user?.name}
           </div>
-          <div className="text-right text-gray-400">작성자 : 제이지</div>
           <div className="mb-4">
             <div>
               <pre className="font-roboto w-full p-2 whitespace-pre-wrap">
-                좋은 소식을 가지고 왔습니다.
-                <br />
-                오늘 드디어 최종 면접을 합니다.
-                <br />
-                많이 응원해 주세요^^
+                {data?.content}
               </pre>
             </div>
             <hr />
@@ -64,7 +68,7 @@ const Page = ({
         </form>
       </section>
 
-      <CommentList />
+      <CommentList id={`${data?._id}`} />
     </main>
   );
 };

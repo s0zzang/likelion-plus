@@ -1,4 +1,4 @@
-import { Post, PostComment, User } from "@/types";
+import { Post, PostComment, UserData } from "@/types";
 import moment from "moment";
 import { Collection, Db, MongoClient } from "mongodb";
 
@@ -9,11 +9,12 @@ interface Seq {
 
 interface CommunityDb extends Db {
   post: Collection<Post>;
-  user: Collection<User>;
+  user: Collection<UserData>;
   seq: Collection<Seq>;
 }
 
-const url = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_SERVER}:${process.env.DB_PORT}`;
+const url = process.env.DB_SERVER!;
+// const url = 'mongodb://localhost:27017';
 const client = new MongoClient(url);
 const dbName = "00-sample";
 console.log("try to connect...");
