@@ -1,11 +1,11 @@
-"use client";
+import { auth } from "@/auth";
 import Link from "next/link";
 import Anchor from "../Anchor";
-import { usePathname } from "next/navigation";
+import MainMenu from "./MainMenu";
+import LoginInfo from "./LoginInfo";
 
-const Header = () => {
-  const pathname = usePathname();
-  const isActive = (path: string) => (pathname === path ? "cs-active" : "");
+const Header = async () => {
+  const session = await auth();
 
   return (
     <header className="px-8 min-w-80 bg-slate-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 transition-color duration-500 ease-in-out">
@@ -22,48 +22,22 @@ const Header = () => {
             <span className="text-lg font-bold">멋사컴</span>
           </Link>
         </div>
-        <div className="w-auto order-2 text-base mt-4 md:mt-0">
-          <ul className="flex items-center gap-6 uppercase">
-            <li
-              className={`hover:text-amber-500 a:font-semibold ${isActive(
-                "/info"
-              )}`}
-            >
-              <Link href="/info">정보공유</Link>
-            </li>
-            <li
-              className={`hover:text-amber-500 a:font-semibold ${isActive(
-                "/free"
-              )}`}
-            >
-              <Link href="/free">자유게시판</Link>
-            </li>
-            <li
-              className={`hover:text-amber-500 a:font-semibold ${isActive(
-                "/qna"
-              )}`}
-            >
-              <Link href="/qna">질문게시판</Link>
-            </li>
-            <li
-              className={`hover:text-amber-500 a:font-semibold ${isActive(
-                "/notice"
-              )}`}
-            >
-              <Link href="/notice">공지게시판</Link>
-            </li>
-          </ul>
-        </div>
+
+        <MainMenu />
 
         <div className="w-1/2 order-1 flex justify-end items-center md:order-2 md:w-auto">
-          <div className="flex justify-end">
-            <Anchor href="/login" size="sm">
-              로그인
-            </Anchor>
-            <Anchor href="/signup" size="sm" color="black">
-              회원가입
-            </Anchor>
-          </div>
+          {session?.user ? (
+            <LoginInfo name={session.user.name!} image={session.user.image} />
+          ) : (
+            <div className="flex justify-end">
+              <Anchor href="/login" size="sm">
+                로그인
+              </Anchor>
+              <Anchor href="/signup" size="sm" color="black">
+                회원가입
+              </Anchor>
+            </div>
+          )}
 
           <button
             type="button"
